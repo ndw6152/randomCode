@@ -1,0 +1,53 @@
+## Notes to setup Heroku and virtualenv for windows
+## and improve powershell colors and allow to use virtualenv
+
+https://devcenter.heroku.com/articles/getting-started-with-java#introduction
+Install Java 8
+Install Maven 3
+login in Heroku CLI
+
+Note: maybe with Maven add Maven CheckStyle, FindBugs, PMD
+
+install http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+jdk and jre
+add JAVA_HOME path for jdk
+
+run gradlew.bat stage
+heroku local -f .\Procfile.windows
+
+## Setting up virtual env on Windows and using powershell to activate the environment
+# http://timmyreilly.azurewebsites.net/python-pip-virtualenv-installation-on-windows/
+# installing virtualenv for windows
+pip install virtualenv
+pip install virtualenvwrapper-win
+# Added environment variable for WORKON_HOME to point to new directory D:/
+
+mkvirtualenv Hello
+& cmd /k workon HelloWold # issue cannot use powershell
+
+
+# created a new profile https://www.jonathanmedd.net/2015/01/how-to-make-use-of-functions-in-powershell.html
+New-Item -Path $profile -ItemType File -Force
+
+# C:\Users\Anonealio\Documents\WindowsPowerShell
+# added function in the file Microsoft.PowerShell_profile.ps1
+function prompt {
+    Write-Host ("@") -NoNewLine -ForegroundColor Magenta
+    Write-Host ("Anonealio") -NoNewLine -ForegroundColor Green
+    Write-Host (":") -NoNewLine -ForegroundColor Magenta
+    Write-Host ($(Get-Location)) -NoNewLine -ForegroundColor Green
+    Write-Host (">") -NoNewLine -ForegroundColor Red
+    return " "
+}
+
+# Followed https://github.com/regisf/virtualenvwrapper-powershell to be able to user powershell and workon
+# added following to Microsoft.PowerShell_profile.ps1
+$MyDocuments = [Environment]::GetFolderPath("mydocuments")
+Import-Module $MyDocuments\WindowsPowerShell\Modules\VirtualEnvWrapper.psm1
+
+updated VirtualEnvWrapper.psm1 
+Line 27 to point to correct envs folder
+Line 151 to create env using the python.exe
+
+mkvirtualenv helloWorld
+workon helloWorld
